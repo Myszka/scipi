@@ -1,9 +1,9 @@
 #!/bin/bash
 IPserv="212.87.6.251/mich/Rover.php"
-stacja='bb-p2'
-myIP=`/bin/ip a s |grep inet|grep brd|cut -d' ' -f6|tail -1`
+stacja='bb-rover'
 while :
 do
+	myIP=`/bin/ip a s |grep inet|grep brd|cut -d' ' -f6|tail -1`
 	datenow=`date '+%Y%m%d_%H:%M.%S'`
 	folder=`date '+%Y%m/pms7003_%Y-%m-%d'`
 	pm10=`tail -1 /var/data/PMS7003/$folder.csv |cut -d, -f11`
