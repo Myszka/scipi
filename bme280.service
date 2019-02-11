@@ -1,0 +1,10 @@
+[Unit]
+Description=PolandAOD power on BME280
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/get_bme280.py &
+
+[Install]
+WantedBy=multi-user.target
+

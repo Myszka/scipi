@@ -1,0 +1,10 @@
+[Unit]
+Description=PolandAOD pinger 
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pinger.sh &
+
+[Install]
+WantedBy=multi-user.target
+

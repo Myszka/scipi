@@ -1,0 +1,10 @@
+[Unit]
+Description=PolandAOD powers on GPS
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/get_gps.py &
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,10 @@
+[Unit]
+Description=RTC with battery backup
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/rtc.sh &
+
+[Install]
+WantedBy=multi-user.target
+

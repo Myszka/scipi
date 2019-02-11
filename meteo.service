@@ -1,0 +1,10 @@
+[Unit]
+Description=PolandAOD powers on Meteo McGill METPAK 
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/get_meteo.py &
+
+[Install]
+WantedBy=multi-user.target
+
