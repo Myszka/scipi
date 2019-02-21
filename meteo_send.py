@@ -2,7 +2,8 @@ from datetime import datetime,timedelta
 from numpy import genfromtxt,mean,isnan
 from Adafruit_IO import Client
 from time import sleep
-from sendcfg import aio
+
+aio = Client('PolandAOD', 'cdd2d93d5bda47c38ee2d0adf79c91c4')
 
 datadir='/var/data/'
 fol='PMS7003'
@@ -31,13 +32,14 @@ while True:
 
     try:
         inT=date2matlab(datetime.now()-timedelta(minutes=1))
-        
+        print inT
         #column number for matlab time
-        seldata=data[data[:,6]>inT,:]
+        seldata=data[data[:,7]>inT,:]
+        print len(seldata)
         #column number for temperature
-        pm25=mean(seldata[:,8])
+        pm25=mean(seldata[:,9])
         #column number for humidity
-        pm10=mean(seldata[:,9])
+        pm10=mean(seldata[:,10])
         #column number for pressure
         print(str(pm25)+" PM 2.5")
         print(str(pm10)+" PM 10")
@@ -47,9 +49,9 @@ while True:
     try:
         if ~isnan(pm25):
             aio.send('bielskobiala.bbup-pm25', pm25)
-            print(str(temp)+" PM 2.5 sent to IO")
+            print(str(pm25)+" PM 2.5 sent to IO")
             aio.send('bielskobiala.bbup-pm10', pm10)
-            print(str(humid)+" PM 10 sent to IO")
+            print(str(pm10)+" PM 10 sent to IO")
             
         else:
             print("No new data")
