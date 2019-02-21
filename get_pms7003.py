@@ -8,8 +8,12 @@ import struct
 import array
 import time
 import io, fcntl
+import subprocess
 from datetime import datetime,timedelta
 import os
+
+batcmd="cat /sys/class/leds/red_led/brightness"
+result = subprocess.check_output(batcmd, shell=True)
 
 datadir='/var/data/PMS7003'
 filenm='pms7003'
@@ -45,7 +49,7 @@ class i2c(object):
 
 class HTU21D(object):
     def __init__(self):
-        self.dev = i2c(HTU21D_ADDR, 0)  # HTU21D 0x40, bus 1
+        self.dev = i2c(HTU21D_ADDR, 1)  # HTU21D 0x40, bus 1
         self.dev.write(CMD_SOFT_RESET)  # Soft reset
         time.sleep(.1)
 
@@ -127,6 +131,15 @@ def initsen177(port='/dev/ttyS1'):
 		print ("Serial initialization error: {}".format(e))
 		return 99
 
+
+def blink():
+	batcmd="cat /sys/class/leds/red_led/brightness"
+	result = subprocess.check_output(batcmd, shell=True)
+	if (int(result)==1):
+		os.system("echo 0 > /sys/class/leds/red_led/brightness")
+	elif (int(result)==0):
+		os.system("echo 1 > /sys/class/leds/red_led/brightness")
+	
 
 def readbit(inp,bit):
 	'''
@@ -243,12 +256,14 @@ while True:
 		        time.sleep(0.1)
 
 			if pmy[-1]==1:
+
         			fname=filetowrite()
                 		with open(fname, 'a') as f:
 		                    f.write(str(IDstacji)+','+str(datetime.utcnow().year)+','+str(datetime.utcnow().month)+','+str(datetime.utcnow().day)+',' \
 		                    +str(datetime.utcnow().hour)+','+str(datetime.utcnow().minute)+','+str(datetime.utcnow().second)+','+str(date2matlab(datetime.now()))+',' \
 		                    +toascii(pmy)+toascii(tmpy)[:-1]+'\n')
 	        	        f.closed
+                                blink()
 
 			else:
 				ser.close()
