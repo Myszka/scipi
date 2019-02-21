@@ -5,8 +5,8 @@ from time import sleep
 from sendcfg import aio
 
 datadir='/var/data/'
-fol='METEO'
-fil='meteo'
+fol='PMS7003'
+fil='pms7003'
 
 def date2matlab(dt):
    ord = dt.toordinal()
@@ -33,27 +33,23 @@ while True:
         inT=date2matlab(datetime.now()-timedelta(minutes=1))
         
         #column number for matlab time
-        seldata=data[data[:,7]>inT,:]
+        seldata=data[data[:,6]>inT,:]
         #column number for temperature
-        temp=mean(seldata[:,12])
+        pm25=mean(seldata[:,8])
         #column number for humidity
-        humid=mean(seldata[:,11])
+        pm10=mean(seldata[:,9])
         #column number for pressure
-        press=mean(seldata[:,10])
-        print(str(temp)+" C sent to IO")
-        print(str(humid)+" % sent to IO")
-        print(str(press)+" hPa send to IO")
+        print(str(pm25)+" PM 2.5")
+        print(str(pm10)+" PM 10")
     except:
         print "ERROR: data processing wrong"
 
     try:
-        if ~isnan(temp):
-            aio.send('bielskobiala.bbup-temperature', temp)
-            print(str(temp)+" C sent to IO")
-            aio.send('bielskobiala.bbup-humidity', humid)
-            print(str(humid)+" % sent to IO")
-            aio.send('bielskobiala.bbup-pressure', press)
-            print(str(press)+" hPa send to IO")
+        if ~isnan(pm25):
+            aio.send('bielskobiala.bbup-pm25', pm25)
+            print(str(temp)+" PM 2.5 sent to IO")
+            aio.send('bielskobiala.bbup-pm10', pm10)
+            print(str(humid)+" PM 10 sent to IO")
             
         else:
             print("No new data")
